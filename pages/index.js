@@ -1,7 +1,6 @@
 // import { useEffect, useState } from "react";
 import Seo from "./Seo";
-import Image from 'next/image';
-import Link from "next/link";
+// import Image from 'next/image';
 import { useRouter } from "next/router";
 
 function Home({results}) {
@@ -15,18 +14,37 @@ function Home({results}) {
     }, `movie/${id}`)
   }
   return (
-    <div>
+    <div className="container">
       <Seo title={"Home"}/>
       {!results && <h4>Loading...</h4>}
       {results?.map((movie) => 
-        <div key={movie.id}>
-          <Image alt="movie clip" src={`http://image.tmdb.org/t/p/w500${movie.poster_path}`} width={"100px"} height={"100%"} />
-          <span className="title" onClick={() => onClick(movie)}>{movie.original_title}</span>
+        <div className="movie" key={movie.id} onClick={() => onClick(movie)}>
+          <img alt="movie clip" src={`http://image.tmdb.org/t/p/w500${movie.poster_path}`}/>
+          <h4 className="title">{movie.original_title}</h4>
         </div>)}
       <style jsx>{`
-        .title {
+        .container {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          padding: 20px;
+          gap: 20px;
+        }
+        .movie {
           cursor: pointer;
-          display: block;
+        }
+        .movie img {
+          max-width: 100%;
+          border-radius: 12px;
+          transition: transform 0.2s ease-in-out;
+          box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+        }
+        .movie:hover img {
+          transform: scale(1.05) translateY(-10px);
+        }
+        .movie h4 {
+          font-size: 18px;
+          text-align: center;
+          margin-top: 0.7rem;
         }
       `}</style>
     </div>
