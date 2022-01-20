@@ -5,13 +5,13 @@ import { useRouter } from "next/router";
 
 function Home({results}) {
   const router = useRouter();
-  const onClick = ({original_title, id}) => {
+  const onClick = ({original_title, id, poster_path}) => {
     router.push({
-      pathname: `/movie/${id}`,
+      pathname: `/movie/${original_title}/${id}`,
       query: {
-        title: `${original_title}`
+        poster: `${poster_path}`
       }
-    }, `movie/${id}`)
+    }, `/movie/${original_title}/${id}`)
   }
   return (
     <div className="container">
