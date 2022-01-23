@@ -1,5 +1,6 @@
+import axios from "axios";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import Seo from "../Seo";
 
 function InitialDetail({title, id, poster}) {
@@ -32,26 +33,27 @@ function LoadedDetail(movie) {
         <div className="bg" style={{backgroundImage: `url(http://image.tmdb.org/t/p/w500${backdrop_path})`}}></div>
     </>
 }
-export default function Detail(/*{params:[title, id], poster=""}*/) {
-    const router = useRouter();
-    const [title, id] = router.query.params || [,];
-    const poster = router.query.poster || '';
+export default function Detail({params=[,], poster=''}) {
+    const [title, id] = params;
     const [movie, setMovie] = useState();
     useEffect(() => {
-        if(id) {
-            (async() => {
-                const json = await (await fetch(`http://localhost:3000/api/movie/${id}`)).json();
-                if(json.id) {
-                    setMovie(json);
-                }
-            })();
-        }
+        // 1. using axios
+        axios.get(`http://localhost:3000/api/movie/${id}`).then(({data}) => {
+            if(data.id) {
+                setMovie(data)
+            }
+        })
+        // 2. using fetch
+        // fetch(`http://localhost:3000/api/movie/${id}`).then((resp) => resp.json()).then((json) => {
+        //     if(json.id) {
+        //         setMovie(json)
+        //     }
+        // })
     }, [id])
     return (
         <div>
-            <Seo title={"Detail"}/>
-            {!movie? <InitialDetail title={title} id={id} poster={poster} /> : ""}
-            {movie? <LoadedDetail movie={movie}/>:""}
+            <Seo title={`${title}`}/>
+            {!movie? <InitialDetail title={title} id={id} poster={poster} /> : <LoadedDetail movie={movie}/>}
             <style jsx global>{`
                 img {
                     width: 150px;
@@ -75,6 +77,6 @@ export default function Detail(/*{params:[title, id], poster=""}*/) {
 }
 
 
-// export function getServerSideProps({query}) {
-//     return {props: query};
-// }
+export async function getServerSideProps({query}) {
+    return {props: query};
+}
