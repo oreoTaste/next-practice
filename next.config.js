@@ -19,7 +19,11 @@ module.exports = {
       {
         source: "/api/movies",
         destination: `http://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}`
-      }
+      },
+      {
+        source: "/api/movie/:id",
+        destination: `http://api.themoviedb.org/3/movie/:id?api_key=${API_KEY}`
+      },
     ]
   }
 }
