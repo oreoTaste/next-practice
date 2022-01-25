@@ -5,6 +5,7 @@ module.exports = {
   images: {
     domains: ['image.tmdb.org'],
   },
+  basePath: process.env.PUBLIC_URL,
   async redirects() {
     return [
       {

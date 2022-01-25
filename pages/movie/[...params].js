@@ -37,30 +37,35 @@ export default function Detail({params=[,], poster=''}) {
     const [title, id] = params;
     const [movie, setMovie] = useState();
     useEffect(() => {
-        // 1. using axios
-        axios.get(`http://localhost:3000/api/movie/${id}`).then(({data}) => {
-            if(data.id) {
-                setMovie(data)
-            }
-        })
-        // 2. using fetch
-        // fetch(`http://localhost:3000/api/movie/${id}`).then((resp) => resp.json()).then((json) => {
-        //     if(json.id) {
-        //         setMovie(json)
-        //     }
-        // })
+        async function fetchJson() {
+            let json = await (await fetch(`/api/movie/${id}`)).json();
+            if(json.id) {
+                setMovie(json)
+            }                
+        }
+        fetchJson();        
     }, [id])
     return (
-        <div>
+        <div className="container">
             <Seo title={`${title}`}/>
             {!movie? <InitialDetail title={title} id={id} poster={poster} /> : <LoadedDetail movie={movie}/>}
             <style jsx global>{`
+                .container {
+                    padding: 20px;
+                }
+              
                 img {
+                    position: relative;
                     width: 150px;
                     float: right;
+                    margin: 0.5rem;
+                    padding: 0.5rem;
                 }
                 ul {
                     font-weight: bold;
+                }
+                ol {
+                    padding-left: 1.1rem;                    
                 }
                 .bg {
                     width: 100vw;

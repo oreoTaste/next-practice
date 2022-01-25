@@ -61,6 +61,6 @@ export async function getServerSideProps() {
   //     console.log(results)
   //   })();
   // }, []);
-  const {results} = await(await fetch(`http://localhost:3000/api/movies`)).json();
+  const {results} = await(await fetch(`http://127.0.0.1:3000/api/movies/`)).json();
   return {props:{results}};
 }
